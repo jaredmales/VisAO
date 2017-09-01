@@ -1,0 +1,15 @@
+/** \defgroup operators_users_guide Operator's Guide 
+  * \brief Guide to operating the VisAO camera.
+  */
+
+/** \defgroup software_users_guide Software User's Guide 
+  * \brief Guide to using the VisAO camera software.
+  */
+
+
+
+/** \defgroup reduction_users_guide Data Reduction 
+  * \brief Guide to reducing VisAO data
+  */
+
+

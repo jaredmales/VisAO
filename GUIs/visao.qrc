@@ -1,0 +1,17 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource>
+        <file>icons/up.png</file>
+        <file>icons/up_64.png</file>
+        <file>icons/down.png</file>
+        <file>icons/down_64.png</file>
+        <file>icons/stop.png</file>
+        <file>icons/stop_64.png</file>
+        <file>icons/arrow_up_128.png</file>
+        <file>icons/arrow_down_128.png</file>
+        <file>icons/arrow_left_128.png</file>
+        <file>icons/arrow_right_128.png</file>
+        <file>icons/Logo_3_transparent_64.png</file>
+        <file>icons/Logo_4_64.jpg</file>
+        <file>icons/Logo_4_square_64.jpg</file>
+    </qresource>
+</RCC>

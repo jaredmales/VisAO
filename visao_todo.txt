@@ -1,0 +1,44 @@
+VisAO To Do:
+
+X Create visao svn repository (done 4 Nov 2010)
+
+X Move dioserver and shutter stuff to the main visao directory, svn accordingly
+
+X Create main makefile which makes the relevant parts of adopt.  Currently logger.a and thrdlib.a (done 4 Nov 2010)
+
+X Port dioserver to c++, add logging
+
+X Design visao to wfs interface (1 server?, multiple servers?, etc.)
+  Using AOApps to talk to supervisor
+  Use FIFOs for comms between 
+
+X CCD47: test simple_take vs simplest_take, is it the device name issue? (done 4 Nov 2010)
+   11/1/2010 - it appears to be a problem with DALSA_2CH_INTLV setting in cfg.  Email sent to cliff at EDT.
+   11/2/2010 - solved with help from EDT, have to use setdebug workaround
+
+- develop EDT startup system, including setdebug -k 0 (?) 
+   11/6/2010 - it appears the setdebug -k 0 won't work, have to use -k c 
+             - this causes a need to flush the first N buffers (e.g. 4)
+				 - need to work out timing implications of this, does this mean we lose data?
+
+X CCD47: learn how to upload the 2nd file (done 4 Nov 2010)
+  using VisAOJoeCtrl
+
+- CCD47: design configuration changing system for CCD47
+  Need to add EDT cfg facility to the JoeCtrl config file.
+  VisAOJoeCtrl will then initcam when necessary.
+  
+- CCD47: check how JoeCtrl deals with blank program spots
+
+- CCD47: change ccd47 gui so it handles binning and speed as single program selections.
+
+X Put visao conf directory under version control
+
+- Focus stage GUI: separate position and go-to input boxes.
+
+- imviewer: - develop grabbable boxes
+            - implement relative scales
+            - add log scale
+            - troubleshoot disappearing zoom view - may be take47
+
+- 

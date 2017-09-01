@@ -1,0 +1,22 @@
+/** \page gimbal_userguide The Gimbal
+ * \ingroup operators_users_guide
+ 
+This is the user's guide to the Gimbal GUI.
+
+The current position is indicated on the right.
+
+To move the gimbal mirror, you can use the arrow keys.  Tapping the keys for a short period of time causes a move based on the length of time the arrow key was pressed.  After a certain amount of time (usually about 1 second, but this is tuned for responsiveness) a slew starts that will last until you release the arrow key.  In any case, a move will not continue after you have released the arrow key.
+
+The STOP button will stop a move in progress started from the New X or New Y GO buttons.  To specify an absolute position in X or Y, enter it in the relevant box and press GO.
+
+The Center button will return the Gimbal to the pre-programmed center position, where the closed-loop spot should be near the center of the CCD47 in the 50/50 beamsplitter.
+
+
+\image html gimbalgui.png "The Gimbal GUI."
+
+\image latex gimbalgui.eps "The Gimbal GUI."
+
+
+**/
+
+

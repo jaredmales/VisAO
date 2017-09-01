@@ -1,0 +1,48 @@
+/** \page ccd47ctrl_userguide The CCD47
+   * \ingroup operators_users_guide
+
+This is the user's guide to the CCD47 Control GUI.
+
+To control the CCD47 select the CCD47 tab.  On the left of the tab the current program set is indicated, and below that the current operating parameters of the CCD47 are displayed.  Below this are the current Little Joe (case) temperature, and the two head temperatures.
+
+A button to launch the image viewer is provided in the top middle of the tab.
+
+Within the CCD47 tab are two tabs which collect different functions.  The first is the Configure tab.
+
+\image html ccd47_configure.png "The CCD47 Control tab with the Configure tab selected."
+
+\image latex ccd47_configure.eps "The CCD47 Control tab with the Configure tab selected."
+
+The Configure tab is where the user changes the operating parameters of the CCD47.  The first drop down box contains an entry for each available program, organized into program sets.  A program consists of pixel speed, window, and binning.  The list also shows the frame rate.  When a program is selected, the <b>Min</b> and <b>Max</b> exposures times are updated.
+
+The second drop down box allows the user to select gains, with four possible settings: HIGH (most sensitive), Med. HIGH, Med. LOW, LOW (least sensitive).  HIGH gain typically only has a depth of ~8000 electrons, while the LOW gain setting uses the full well depth of the CCD 47, approximately 100,000 electrons.  Refer to the CCD 47 calibrations section for detailed information about the gains and associated readout noises.
+
+The user specifies the exposure time by typing a number in seconds into the <b>Exp Time</b> box.  Typing 0 will set the minimum exposure time.  When the desired parameters are selected, pressing <b>Load</b> will re-program the camera with those new settings.  Both gain and exposure time can be changed by themselves, meaning that you do not need to specify the other parameters before pressing load.
+
+Selecting a new program within the same program set takes only about 1 second.  Selecting a program in a different program set will take 30 to 45 seconds because the new set of programs needs to be sent to the CCD.  A progress bar is shown during this process.
+
+The two check boxes below the Load button do not normally need to be used.  If <b>Force Upload</b> is checked, the selected program set will be uploaded, whether it is needed or not.  If <b>Don't Upload</b> is checked, then no parameters are sent to the CCD47, rather just the software state is updated.
+
+\image html ccd47_loading.png "The CCD47 Control tab while loading a new program set."
+
+There are two channels on the CCD47, each with its own black level.  Default black levels are loaded with each program change.  They can be changed using the GUI.  New levels are not sent to the little joe until the <b>Set</b> button is pressed.
+
+Finally, the Configure tab allows the user to <b>Start</b> or <b>Stop</b> the CCD 47 (the button changes functions).  It is normally running.
+
+\image html ccd47_saving.png "The CCD47 Control GUI with the Saving tab selected."
+
+\image latex ccd47_saving.eps "The CCD47 Control GUI with the Saving tab selected."
+
+The <b>Saving</b> tab controls various ways of saving data.  The user can specify the directory in which to save, which is always relative to the main data directory.  Simply typing a directory name in the box will set a new directory, which will be active when the saving starts.  The <b>Dir</b> button will also launch a file selection window.
+
+The <b>Image type</b> drop down meanu allows you to set the image type, which is written to the VIMTYPE fits keyword.  Note: choosing Dark automatically closes the shutter.
+
+The number of frames to be saved is typed into the <b>Save</b> box.  The <b>save continuously</b> box can be checked if you instead desire to start saving until your press stop.  Frames can also be skipped if desired, which can be useful if taking a very long timeseries to track a system parameter for engineering purposes (e.g. temperatures or bias levels).  
+
+Once <b>Start Saving</b> is pressed, the status of saving is updated both below this button, and in the main status board panel.  The button then becomes the  <b>Stop Saving</b> button, and pressing it will stop saving.
+
+The <b>RT Darks</b> area allows you to take a dark which can then be used on the image displayer, but is not written to disk.  Enter the number of frames to average, and then press <b>Go</b>.  The new dark will be used immediately when it is complete.
+
+**/
+
+

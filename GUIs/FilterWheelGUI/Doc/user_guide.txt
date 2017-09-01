@@ -1,0 +1,19 @@
+/** \page filterwheel_userguide The Filter Wheels
+*  \ingroup operators_users_guide
+ 
+This GUI allows you to control the VisAO Filter Wheels (a.k.a. Filter Wheel 2 and Filter Wheel 3).
+
+For normal operations you can select the filter name from the dropdown list, and press Go. Pressing HOME causes a home sequence to execute.  STOP will abort motion at any time.
+
+You can also move in absolute positions and relative to the current position.  Positions are specified in whole filters.
+
+
+\image html filterwheelgui.png "The Filter Wheel GUI."
+
+\image latex filterwheelgui.eps "The Filter Wheel GUI."
+
+
+
+**/
+
+

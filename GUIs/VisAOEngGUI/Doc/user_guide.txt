@@ -1,0 +1,20 @@
+/** \page enggui_userguide The Main GUI
+ * \ingroup operators_users_guide
+
+This is the user's guide to the main VisAO camera control GUI, VisAOEngGUI.  All VisAO GUIs are hosted on the main VisAO computer, visaosup.lco.cl.  This GUI can normally be launched from the VisAO operator's workstation by double-clicking on the "VisAO S/W" icon on the desktop.  Alternatively, one can ssh directly into visaosup and launch the GUI with:
+\code
+ssh -Y v.vis 
+./VisAOEngGUI &
+\endcode
+where v.vis is an alias in the host file for 192.168.3.5, which is the address of visaosup on the VisAO VLAN.  This assumes that you are operating as the <i>aosup</i> user on the VisAO workstation, and that password-less login has been established between the workstation and visaosup.
+
+
+\section imviewer_mainwin Main Window
+
+\image html enggui_explain.png "The main control window of the VisAO camera"
+\image latex enggui_explain.eps "The main control window of the VisAO camera"
+
+
+**/
+
+

@@ -1,0 +1,30 @@
+/** \page focusgui_userguide The Focus Stage
+  * \ingroup operators_users_guide
+
+This is the user's guide to the Focus Stage GUI.
+
+In the top top half of the GUI you can see the current power status of the controller and the current position.  The STOP button is always visible regardless of which tab is selected.  Pressing the STOP button will immediately stop the stage.
+
+As usual, you must have LOCAL control of the stage to make changes from this GUI.
+
+\image html focusmotorgui_moveto.png "The Focus Stage Control GUI with the Move To tab selected."
+
+\image latex focusmotorgui_moveto.eps "The Focus Stage Control GUI with the Move To tab selected."
+
+The Move To tab is normally selected by default.  The stage can be moved from this tab in three different ways.
+
+To move to an absolute position, type the desired position in microns into the box labeled Absolute: and press go.
+
+To move to a new position relative to the current position, type the size of the move (absolute value), and press the + or - button to move in the desired direction.
+
+To move the stage to a preset position (based on filter selections), select the desired preset from the dropdown menu and press go.
+
+\image html focusmotorgui_advanced.png "The Focus Stage Control GUI with the Advanced tab selected."
+
+\image latex focusmotorgui_advanced.eps "The Focus Stage Control GUI with the Advanced tab selected."
+
+The Advanced tab provides some auxiliary controls.  The Enable/Disable button allows you to change the status of the motor current outputs from the controller.  This so far appears to be unnecessary at any time.  The Check blocks indicate the status of the limit switches (the Home Switch is no longer installed and it is ignored by the Focus software).  The Home buttons cause the stage to home to the corresponding hall sensor limit switch.  Homing is not necessary in normal operations, and is usually completely useless due to the high degree of uncertainty in the hall sensor activation position.  The Home button itself has no effect due to the lack of an installed home switch.
+
+**/
+
+

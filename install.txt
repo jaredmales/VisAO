@@ -1,0 +1,17 @@
+Installing visao software:
+
+Need boost libraries, cfitsio, qt4 development tools.
+
+May need to increase shared mem max segment size (recommend at least 1 GB):
+edit sysctl.conf: sudo vi /etc/sysctl.conf 
+add this line at the end: kernel.shmmax=1073741824
+then type: sudo sysctl -p
+
+
+Need the adopt code.
+
+Need the EDT pdv code.
+
+Set environment variables:
+   edit the example file.
+

@@ -1,0 +1,27 @@
+/** \page visao_userguide Overview of VisAO Software
+ * \ingroup operators_users_guide
+
+This user's guide documents the high level Graphical User Interfaces (GUIs) for the VisAO camera of the MagAO system.  For information about the process level interface, refer to the <a href="group__software__users__guide.html">software user's guide</a>. 
+
+Note: This document is best viewed as a web page <a href="http://visao.as.arizona.edu/software_files/visao/html/index.html"> here </a>.
+
+\page visao_controlmodes Control Modes
+\ingroup operators_users_guide
+
+Common to all VisAO processes is the <b>control mode</b>.  At any time a process could be in one of 5 control modes:
+   -  <b> NONE </b> no station has control.
+   -  <b> REMOTE </b> the remote user has control, normally the AO Supervisor workstation.
+   -  <b> LOCAL </b> the local VisAO user has control, normally using the GUIs discussed here.
+   -  <b> SCRIPT </b> a script has control of the process
+   -  <b> AUTO </b> the process is under the control of another VisAO process.
+
+Control modes have precedence in the order listed, with NONE being the lowest and AUTO being the highest.  A process in LOCAL control cannot be changed by a process at any other level.  A SCRIPT or AUTO process/user could, however take control at any time.  A REMOTE user could not though, unless specifically requesting an override.  This system is in place to allow the VisAO camera to exist peacefully as both a subsystem of the LBT AO Supervisor architecture, and as an independently controlled science camera. It is designed so that in all cases science has precedence, and user action cannot accidentally interfere with an observation in progress.
+
+Control mode is managed in the Engineering GUIs with a common interface, shown in the below figure.  When possible, you can request LOCAL control by pressing the button.  When necessary you can request an override first by checking the box.  
+
+\image html ug_control_block.png "The Control Mode block common to all Engineering GUIs."
+
+\image latex ug_control_block.eps "The Control Mode block common to all Engineering GUIs."
+
+\note If you ever find that a button is grayed out, or a GUI seems unresponsive, the first thing you should check is <b>control mode</b>.
+*/

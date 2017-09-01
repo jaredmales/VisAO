@@ -1,0 +1,33 @@
+/** \page adc_adjustment Adjusting The ADC
+ * \ingroup operators_users_guide
+
+The atmospheric dispersion corrector (ADC) often needs to be adjusted, especially at the beginning of the night.
+
+\note The ADC is common to  VisAO and the Pyramid WFS. It can impart a significant tilt on the wavefront, possibly opening the loop.  In closed-loop, the maximum adjustment that should be made in one step is 4 degrees.
+
+\image html ug_adc_bad.png "This image shows a PSF with symptoms of a poorly-adjusted ADC.  Note the squished bow-shock shape at about 1-2 o'clock, and the general assymetry of the core and speckles"
+
+
+If the ADC needs to be adjusted (see the above figure), follow these steps:
+-# Place F/W 2 in open and F/W 3 in open
+-# Take RT dark and apply dark subtraction on imviewer
+-# Go to log scale and bone color table (these seem to work best for Jared)
+-# open WFS hw gui (use WFS S/W link on Vizzy desktop)
+-# select "ADC hi-level"
+\image html ug_adc_adjustment.png "The WFS hs gui with ADC hi-level selected.  The delta dispersion angle is set to 4, with a new value of 8 about to be set."
+\note steps of 4 degrees are completely safe in closed loop.  Do not use steps bigger than this.
+-# Adjust "delta dispersion angle"
+   -  Typical beginning of the night values are 8-12 degrees total  
+   - anywhere from 0 to 16 has been found at various times
+   
+-# When the image looks like the good PSF shown below, close the WFS hw gui and take data.
+
+\image html ug_adc_adjusted.png "An open/open PSF after ADC adjustment. Note the symmetric speckles and lack of 'bow shock' "
+
+
+
+
+
+
+
+*/

@@ -1,0 +1,217 @@
+/** \page visao_reduction Introduction to VisAO Data Reduction
+ * \ingroup reduction_users_guide
+ *
+
+This is a basic overview of basic VisAO data reduction.  
+
+
+\section fits_headers FITS Headers:
+
+Data contained in the FITS headers  of VisAO data are read from the end of the readout of the camera, that is from the end of the observation plus the readout time.  Due to polling times and update latencies, these data could be even several seconds older.  Note that the readout time of the camera does not depend on exposure time, and the longest readout time of the camera is 6.7 seconds, and will usually be much shorter. 
+
+The FITS keywords most useful for data reduction are:
+\code
+OBJECT  = 'Unknown '           / Object Name
+
+PARANG  =            -115.9957 / Parallactic angle at end of observation (degree
+
+ROTANG  =                   0. / Rotator angle at end of observation (degrees)
+
+ROTOFF  =             244.0043 / Rotator offset at end of observation (degrees) 
+
+AOLOOPST= 'CLOSED  '           / Loop status
+
+EXPTIME =         0.1491869375 / CCD47 exposure time (sec)
+
+VIMTYPE = 'SCIENCE '           / Image Type 
+
+VFW2POSN= 'SDSS z'''           / Filter name in VisAO Filter Wheel #2
+
+VFW3POSN= 'Open    '           / Filter name in VisAO Filter Wheel #3
+
+VWOLLSTN= 'OUT     '           / Status of VisAO Wollaston
+
+VSHUTTER= 'OPEN    '           / Status of VisAO Shutter
+
+\endcode
+
+The complete VisAO FITS header can be viewed here: \ref visao_fits.
+
+\section imtypes Image Types
+
+The <b>VIMTYPE</b> keyword can have the values ACQUISITON, SCIENCE, SKY, DARK, or FLAT.  During a typical science observation, some combination of ACQUISITION, SCIENCE, SKY and/or DARK images will be contained in the same subdirectory.  The <b>VIMTYPE</b> keyword can be used to sort images.
+ 
+\section dark_subtract Bias and Dark Subtraction
+
+The bias level of the little joe 47 depends on temperature of the CCD Electronics box (mounted on the NAS).  This box is glycol cooled to ambient temperature, and so will change with time.  The normal method for compensating for CCD bias drift is to use an overscan region of the chip as an estimation of bias.  This capability exists for the VisAO CCD47, but has not been implemented yet, mainly due to its impact on speed, the fact that it only works on full-frame modes, and Jared just never got around to it.  VisAO does not have the ability to take true zero-length bias frames, rather we just take full-length shutter-closed dark images to track bias level.
+
+Typically, a short sequence of shutter-closed darks is taken periodically throughout a science data set.  A master dark is taken at the beginning and/or end, and the interim darks are used to scale the master dark with time.  Note that the CCD 47 has two amplifiers with slightly different characteristics, so the two halves of the chip should probably be treated independently in dark subtraction over long data sets.
+
+\section derot De-rotating VisAO Images
+
+The <b>ROTOFF</b> keyword, which comes from the TCS, contains the nominal value by which to derotate an image to get North-up East-left (NUPEL).  For a VisAO image there is an additional rotation of 90 degrees due to the overall mounting orientation, and a small offset from there which is calibrated run to run to account for the as-built and as-mounted orientation.  To get a true NUPEL image (whether rotator tracking or rotator off) use:
+
+\f[
+DEROT_{VisAO} = ROTOFF + 90.0 + NORTH_{VisAO}
+\f]
+
+where \f$DEROT_{VisAO}\f$ is the amount, in degrees, to rotate <b>counter-clockwise</b>.  The exact value of \f$NORTH_{VisAO}\f$ will be provided as part of each run's calibrations (see below for our nominal value).  Note that <b>PARANG</b> contains the TCS value of the parallactic angle at the end of the observation, and <b>ROTANG</b> contains the value of the rotator encoder angle, and \f$ROTOFF = PARANG+ROTANG\f$.
+
+\section astro_cal Astrometric Calibration 
+
+During each run we will perform astrometric calibrations of the VisAO camera.  As of 2014 May 6 we have not yet analyzed this data for 2014A.  A quicklook performed during the run showed no major change from our previous values of:
+
+\f$NORTH_{VisAO}\f$ = -0.59 +/- 0.3 degrees
+
+\f$platescale\f$ = 7.9 +/- 0.02 mas/pix
+
+See <a href="http://adsabs.harvard.edu/abs/2014ApJ...786...32M">Males et al 2014</a> for the details of these numbers. 
+
+
+\section gain_ron Gains and Readout Noise
+
+The CCD 47 readout rates and gains are changed often to optimize sensitivity and control saturation.  A common situation is to have frames in one setting where the primary star is saturated, and a set of unsaturated frames in a faster frame rate and/or lower gain setting.  Each camera program, which consists of pixel rate, window size, and binning, has four discrete gain settings.  The HIGH setting is the most sensitive, meaning lowest read noise and least digitization noise.  The tradeoff is with the depth of the camera. The digital depth is always 16383 ADU, and in the HIGH gain setting this translates to only about 8000 electrons.  The LOW gain setting always has much higer digitization noise, but give access to the full ~100,000 electron well depth of the CCD 47.
+
+The following table gives the gains and readout noise (RON) for the most commonly used modes.  Values for additional modes are available upon request.
+
+<table>
+<tr>
+   <td>Mode</td> 
+   <td> Gain<br />Setting 
+   </td>
+   <td> Gain <br />(e-/ADU)
+   </td>
+   <td> RON <br />(e-)
+   </td>
+</tr>
+
+<tr>
+   <td rowspan="4">2500 kHz <br /> 1024x124 <br /> bin 1x1
+   </td> 
+   <td> HIGH </td>
+   <td> 0.53</td>
+   <td> 9.7 </td>
+</tr>
+
+<tr>
+   <td> MED HIGH </td>
+   <td> 1.53 </td>
+   <td> 9.55 </td>
+</tr>
+
+<tr>
+   <td> MED LOW</td>
+   <td>3.58</td>
+   <td>10.74</td>
+</tr>
+
+<tr>
+   <td> LOW </td>
+   <td>13.23</td>
+   <td>15.47</td>
+</tr>
+
+
+
+
+<tr>
+   <td rowspan="4">2500 kHz <br /> 64x64 <br /> bin 1x1
+   </td> 
+   <td> HIGH </td>
+   <td> 0.54</td>
+   <td> 9.62 </td>
+</tr>
+
+<tr>
+   <td> MED HIGH </td>
+   <td> 1.93 </td>
+   <td> 9.58 </td>
+</tr>
+
+<tr>
+   <td> MED LOW</td>
+   <td>3.58</td>
+   <td>10.86</td>
+</tr>
+
+<tr>
+   <td> LOW </td>
+   <td>13.14</td>
+   <td>15.49</td>
+</tr>
+
+
+
+<tr>
+   <td rowspan="4">250 kHz <br /> 1024x124 <br /> bin 1x1
+   </td> 
+   <td> HIGH </td>
+   <td> 0.47</td>
+   <td> 4.52 </td>
+</tr>
+
+<tr>
+   <td> MED HIGH </td>
+   <td> 1.77 </td>
+   <td> 4.67 </td>
+</tr>
+
+<tr>
+   <td> MED LOW</td>
+   <td>3.34</td>
+   <td>5.28</td>
+</tr>
+
+<tr>
+   <td> LOW </td>
+   <td>12.3</td>
+   <td>11.11</td>
+</tr>
+
+<tr>
+   <td rowspan="4">250 kHz <br /> 512x512 <br /> bin 1x1
+   </td> 
+   <td> HIGH </td>
+   <td> 0.48</td>
+   <td> 3.84 </td>
+</tr>
+
+<tr>
+   <td> MED HIGH </td>
+   <td> 1.77 </td>
+   <td> 4.25 </td>
+</tr>
+
+<tr>
+   <td> MED LOW</td>
+   <td>3.32</td>
+   <td>4.88</td>
+</tr>
+
+<tr>
+   <td> LOW </td>
+   <td>12.36</td>
+   <td>10.52</td>
+</tr>
+
+
+</table>
+
+\section exptime Exposure Time and Gain scalings
+
+It is useful to convert from ADU to electrons per second when comparing images taken with different camera settings.   To convert we calculate the scaling factor (SF) to multiply each pixel by.  The formula is:
+
+\f[
+SF = \frac{GAIN}{EXPTIME}10^{ND}
+\f]
+Where:
+
+SF = scale factor which converts ADU to electrons/second
+
+GAIN = the gain factor, in electrons/ADU.  This depends on the gain setting (LOW, MLOW, MHIGH, HIGH) which is given in the fits header as V47GAIN, and the pixel rate which is V47PIXRT, and very weakly on the window size and binning.  See the above table for the measured gains.
+
+EXPTIME = the exposure time of the image, in VisAO fits headers it is given by the standard EXPTIME keyword.
+
+ND = value of the neutral density filter if used, 0 otherwise.
+
+*/

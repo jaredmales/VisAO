@@ -1,0 +1,95 @@
+/** \page 2014A_calibrations 2014A VisAO Calibrations
+ * \ingroup reduction_users_guide
+ *
+
+This page documents various calibrations performed during the 2014A run.
+
+\section flat_field_2014A Flat Field
+
+Morning sky flats were found to be much better than evening sky flats.  The direction that sunlight enters the dome in the evening causes significant glinting which does not appear to be as bad in the morning.  Even in the morning, the illumination pattern is such that the resultant flat is only useful for high spatial frequency response (i.e. pixel to pixel), and some glinting is still visible with a sufficiently large smoothing kernel.
+
+These flats were taken on the morning of 2014 Apr 18 UT, in the 50/50 beamsplitter and the z' filter.  Exposure time was adjusted as the sky brightened to avoid saturation.
+
+The following steps were taken to form the flat:
+
+- images were selected to have the same filter combination
+- images were selected to have no digitally saturated pixels (16383 ADU)
+- images were bias subtracted using a 2.273s bias frame.  darks at other exposure times were not taken.
+- an offset remained between the biases of the two amplifiers.  this was corrected in each image by adding a constant to the bottom half so that medians of the rows on either side of the amplifier boundary were equal.
+- next each image was median smoothed with an odd-pixel sized boxcar
+- then each image was divided by the smoothed version of itself
+- the images were then combined with a 3-sigma clipped mean
+
+The choice of smoothing width affects the quality of the flat under the dust spots, which are of order 20 pixels wide, and it affects the rejection of mid-spatial frequency glints.  By comparing a flat with an 11 and a flat with a 41 pixel smoothing width, we found that the major glint (which becomes visible in the 41 pixel flat) only raises the apparent response by ~0.2%.  In contrast, the 11 pixel flat overstates the response under large dust spots by up to 1%.  We recommend using the 41 pixel flat, but several choices (11,21,31, 41) are provided.  A simple ratio of these images will allow you to analyze the tradeoffs.
+
+\image html flat41.png "Pixel to pixel response using a 41 pixel smoothing width."
+
+Note that the ~10 pixels at the edge of the flats should not be used, as smoothing is suspect there. 
+
+Download: <a href="visao_flat_2014.04.17_median11.fits">VisAO Flat with 11 pixel smoothing width</a><br />
+Download: <a href="visao_flat_2014.04.17_median21.fits">VisAO Flat with 21 pixel smoothing width</a><br />
+Download: <a href="visao_flat_2014.04.17_median31.fits">VisAO Flat with 31 pixel smoothing width</a><br />
+Download: <a href="visao_flat_2014.04.17_median41.fits">VisAO Flat with 41 pixel smoothing width</a> [RECOMMENDED]<br />
+
+The VisAO camera pixel response is flat to better than 1%, with the exceptions of dust spots.  Some statistics of the 41 pixel flat are given below.  For these we excluded 10 pixels at the edge of the array where the smoothing is less effective.
+
+mean response:       1.00011<br />
+median response:       1.00023<br />
+std. dev response:    0.00324769<br />
+min response:      0.935925<br />
+max response:       1.05748<br />
+--------------------<br />
+more than 1% deviation<br />
+No. > 1.01        1397<br />
+No. < 0.99        1645<br />
+--------------------<br />
+more than 2% deviation<br />
+No. > 1.02          14<br />
+No. < 0.98         201<br />
+--------------------<br />
+more than 3% deviation<br />
+No. > 1.03           2<br />
+No. < 0.97          46<br />
+--------------------<br />
+more than 4% deviation<br />
+No. > 1.04           1<br />
+No. < 0.96           8<br />
+--------------------<br />
+more than 5% deviation<br />
+No. > 1.05           1<br />
+No. < 0.95           1<br />
+
+\image html visao_flat_2014_hist.png "With the exception of dust spots,the VisAO CCD response is flat to better than 1%".
+
+\section ND_2014A ND Calibration
+
+The ND was calibrated during 2014A on HD 84687 a V~7 F3V star.  The following table gives the results.
+\note These should be used for observation planning only.  Contact the VisAO team for more up to date ND information.  
+
+\note You should plan ND calibrations if you expect to use it for your observations.
+
+<table>
+<tr>
+<td>Filter</td> <td>Attenuation         </td><td>ND</td>  
+</tr><tr>
+<td>r' </td> <td>7763.6 +/- 433.5 (5.5%)</td> <td>3.89</td>  
+</tr><tr>
+<td>i' </td> <td>1452.9 +/- 37.8 (2.6%) </td> <td>3.16</td>
+</tr><tr>
+<td>z' </td> <td>491.1  +/- 16.1 (3.2%) </td> <td>2.69</td>
+</tr><tr>
+<td>Ys </td> <td>276.6  +/- 8.7 (3.1%)  </td> <td>2.44</td>  
+</tr>
+</table>
+
+Full details of the calibration analysis are available in <a href="https://visao.as.arizona.edu/wp-content/uploads/2014/07/nd_cal_2014.04.03.pdf">this document</a>.
+
+\section throughput_2014A Throughput 
+
+Throughput measurements for 2014A are in progress . . .
+
+\section astrometry_2014A Astrometry 
+
+The astrometric calibration of VisAO for 2014A is ongoing . . .
+  
+*/

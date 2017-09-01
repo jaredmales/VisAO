@@ -1,0 +1,66 @@
+#@File makefile.gen
+
+# General makefile for the VisAO software
+#
+# This makefile must be included by any Makefile used to build 
+# VisAO software modules.  It essentially defines a number 
+# of symbols to be used by makefiles.
+#
+# Makefiles must define two implicit rules for compilation as follows:
+#
+# .c.o:
+#         $(CC) $(CFLAGS) $(OPTIMIZE) -c $<
+# .cpp.o:
+#         $(CPP) $(CPPFLAGS) $(OPTIMIZE) -c $<
+#
+# and must use the predefined commands: $(LINK) and $(LINKPP) to
+# generate code from, respectively, C and C++ object modules.
+#
+# LIST OF ENVIRONMENT VARIABLES NEEDED TO BUILD AND INSTALL ADOPT SOFTWARE
+#   
+#
+
+include $(ADOPT_SOURCE)/makefile.gen
+
+VISAO_LIB = $(VISAO_SOURCE)/lib
+VISAO_INCLUDE = -I$(VISAO_LIB)
+LINK_VISAO_LIB = -L$(VISAO_LIB) -lvisao -lcfitsio -lm
+
+ADOPT_LIB = $(ADOPT_SOURCE)/lib
+
+ADOPT_PART_LIBS = $(ADOPT_SOURCE)/lib/logger.a $(ADOPT_SOURCE)/lib/aoapp.a $(ADOPT_SOURCE)/lib/hwlib/hwlib.a $(ADOPT_SOURCE)/lib/netlib.a \
+	          $(ADOPT_SOURCE)/lib/base/thrdlib.a $(ADOPT_SOURCE)/lib/configlib.a -lpthread -lrt -lboost_serialization $(ADOPT_SOURCE)/lib/hwlib/hwlib.a
+						
+
+ADOPT_PART_INCLUDE = -I$(ADOPT_SOURCE)/lib -I$(ADOPT_SOURCE)/WFSCtrl -I$(ADOPT_SOURCE)/SimpleMotorCtrl -I$(ADOPT_SOURCE)
+
+
+OPTIMIZE = -O2
+#OPTIMIZE = -g
+
+CFLAGS = -W -Wall -Wreturn-type -Wunused -Wmissing-prototypes -D_GNU_SOURCE
+#-g
+CPPFLAGS = -Wall -W -Wreturn-type -Wunused -D_GNU_SOURCE 
+#-g
+
+## Ristrutturazione direttive include
+## Nota: i due simboli seguenti dovranno essere definiti dopo la 
+## modifica delle direttive include
+## 
+CC = gcc  $(ADOPT_PART_INCLUDE) -D$(VISAO_SIM)
+CPP = g++ $(ADOPT_PART_INCLUDE)  -D$(VISAO_SIM)
+
+LINK =  $(MAKE_BUILD_TIME); gcc -g build_time.o
+LINKPP =  $(MAKE_BUILD_TIME); g++ -g build_time.o
+
+
+AR = ar -r 
+RANLIB = ar -s
+
+#here to stop the dependency generation form the adopt makefile.gen
+#.cpp.o:
+%.o: %.cpp
+	$(CPP) $(OPTIMIZE) $(CPPFLAGS) -c $<
+
+%.o: %.c
+	$(CC) $(OPTIMIZE) $(CFLAGS) -c $<

@@ -1,0 +1,361 @@
+/** \page visaoscript_userguide VisAOScript: Python scripting of the VisAO camera
+  * \ingroup operators_users_guide
+  
+This is the user's guide for scripting operations of the VisAO camera.  VisAO camera scripting is provided in the "visao" python module, which controls the various VisAO devices.
+
+\section invoking_visaoscript Invoking VisAO Script
+
+Before running a script, the visao python module must be initialized.  As user aosup on the visaosup computer, simply open a terminal and type python:
+\code
+[aosup@visaosup ~]$ python
+Python 2.4.3 (#1, Jan  9 2013, 06:47:03)
+[GCC 4.1.2 20080704 (Red Hat 4.1.2-54)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+********************************
+VisAO script control initialized
+********************************
+>>>
+\endcode
+
+This automatically initializes the visao module.
+
+\section science_visaoscript Taking Science Data
+
+The highest level script for taking science data is the "observation" script.  It performs a sequence of observations a set number of times.  In this script, an observation is a python tuple with the following structure:
+
+\code
+obs= (fw2Name, fw3Name, PixRate, Window, Gain, ExpTime, TotExp, MasterDarks, DarkInt, nDarks, subdir)
+\endcode
+
+The entries have the following definitions:
+ - <b>fw2Name</b> =  a string, with possible values 'open', "r'", "i'", "z'", or "Ys"
+ - <b>fw3Name</b> =  a string, with possible values  "small spot", "SDI H alpha", "SDI [S II]", "open", "ND 3.22", "large spot"
+ - <b>PixRate</b> = integer pixel rate, with possible values 2500, 250, or 80
+ - <b>Window</b> = window size, with possible values (depending on PixRate) of 1025, 512, 256, 64, 32
+ - <b>Gain</b> = a string, with possible values of 'H', 'MH', 'ML', or 'L'
+ - <b>ExpTime</b> = exposure time of each frame in seconds. Set to 0 for minimum exposure time.
+ - <b>TotExp</b> = the desired total open-shutter exposure time of the observation
+ - <b>MasterDarks</b> = the number of darks to take at the beginning of the observation
+ - <b>DarkInt</b> = the time interval, in seconds, between taking darks, 0 means no subsequent darks
+ - <b>nDarks</b>  = the number of darks to take at each interval
+ - <b>subdir</b>  = the subdirectory in which to put these files
+
+The observation script is invoked as
+\code
+>>> vis.observation(observations, repeats, subdir="", appendts=1)
+\endcode
+
+Where:
+ - <b>observations</b> = an observation or a tuple of observations
+ - <b>repeats</b> = the number of times to repeat.  If <=0, then the observations are repeated until stopped
+ - <b>subdir</b> = the top level subdirectory in which to place each observation
+ - <b>appendts</b> = if 1, then a visao time stamp is appended to subdir
+
+
+Here's an example:
+\code
+>>> obs1 = ("z'", "open", 2500,1024, 'H', 0, 30,5, 15,2, 'zp_unsats')
+>>> obs2 = ("r'", "ND 3.22", 2500,1024, 'ML', 1, 30,5, 15,3, 'rp_sats')
+>>> vis.observation((obs1, obs2),0,"obs_example",0)
+\endcode
+
+
+Another useful script is the <a href="classvisao_1_1VisAO.html#a32bfaabc37726c68b003e37c538efb0b">science</a> script.  This manages taking a set of science exposures, up to a total exposure time, while taking shutter-closed darks at specified intervals.  Note that this is actually called by the observation script. Once the visao module is initialized, the syntax to call the science script is:
+
+\code
+>>>vis.science(totexp, exptime, masterdarks, darkint, ndark, "my_directory_name", appendts=1)
+\endcode
+where:
+ - <b>totexp</b> = the total exposure time, in seconds
+ - <b>exptime</b> = the exposure time, in seconds, of individual frames
+ - <b>masterdarks</b> = the number of initial darks to take
+ - <b>darkint</b> = the interval at which to take subsequent darks
+ - <b>ndark</b> = the number of darks to take after each interval
+ - <b>"my_directory_name"</b> = the name of the directory where you would like this data to be saved
+ - <b> appendts</b> = if 1 (the default), a time stamp is appended to the directory name every time the script is run.  If 0 then the same directory is used.
+ 
+You can see the full documentation of the <a href="classvisao_1_1VisAO.html#a32bfaabc37726c68b003e37c538efb0b"> science script here.</a>
+
+\section dither_visaoscript The Dither Script
+Another useful, similar, script is the <a
+href="classvisao_1_1VisAO.html#a56db18578842d19ea1f007ca582a17de">dither photometry script</a>.  This cycles through the list of filters, including setting the focus position, and executes a dither pattern with the VisAO gimbal.  The list of filters can be set with the sdssFilters() function, and a 5 point dither pattern can be set using xDither() and yDither() as the arguments for dx and dy.
+
+\code
+>>>vis.dither_phot(filters,nims, ndarks, dx, dy, "my_directory_name", appendts=1)
+\endcode
+where:
+ - <b>filters</b> = list of filters to cycle through
+ - <b>nims</b> = the number of science images to take in each dither position per filter
+ - <b>ndarks</b> = the number of initial darks to take
+ - <b>dx</b> = gimbal x offsets from initial position, in mm
+ - <b>dy</b> = gimbal y offsets from initial position, in mm
+ - <b>"my_directory_name"</b> = optional subdirectory.  if not specified, then dither_[timestamp] will be used
+ - <b> appendts</b> = if 1 (the default), a time stamp is appended to the directory name every time the script is run.  If 0 then the same directory is used.
+
+For entering the filters and dx, dy parameters see \ref sdssFilters, \ref xDither, \ref yDither.
+
+
+
+
+\section gettinghelp_visaoscript Getting Help
+
+You can see everything in the VisAO python module <a href="classvisao_1_1VisAO.html">here</a>. To view the contents of the visao module from within python, you can use the dir() command:
+
+\code
+>>> dir(visao)
+\endcode
+Which will print
+\code
+['CCD47Ctrl', 'FilterWheel', 'FilterWheel2', 'FilterWheel3', 'FocusCtrl', 'Shutter', 'VisAOFifoDev',
+'__builtins__', '__doc__', '__file__', '__name__', '__package__', 'get_visao_filename', 'math',
+'os', 'select', 'time']
+\endcode
+
+The documentation for the module can be viewed with:
+\code
+print visao.__doc__
+\endcode
+
+You can also get class specific help with either
+
+\code
+dir(visao.CCD47Ctrl)
+\endcode
+
+or
+
+\code
+help(visao.CCD47Ctrl)
+\endcode
+
+For more a more detailed introduction to python see <a href="http://docs.python.org/release/2.6.7/" > the python documentation online. </a>
+
+\section example_visaoscript Other Examples
+
+Several examples using VisAOScript are contained in the <a href="http://visao.as.arizona.edu/software_files/visao/html/FocusOps_8py_source.html">FocusOps.py</a> script.  These include the script used to calibrate the focus stage step ratio, and scripts to perform a focus measurement and to focus the camera in a sequence of filters.
+
+\code
+"""
+   FocusOps
+
+   The FocusOps python module contains several scripts related to the focus stage..
+"""
+
+import VisAOScript
+import numpy
+import time
+from Numeric import *
+
+def calibration(p = 0):
+   """
+      Script to calibrate the focus stage step-ratio.  Requires manual input of a micrometer measurement, in mm.
+
+      Moves to the front or back of the travel range, whichever is closer when invoked.
+   """
+   foc = VisAOScript.FocusCtrl()
+   foc.take_control()
+
+   if p == 0:
+     d = foc.get_pos()
+     if d > 5500.:
+       poss = 11500. - array(range(9))*2500.
+     else:
+       poss = -9500. + array(range(9))*2500.
+   else:
+     poss = p
+
+   cal_pos = list()
+   meas_pos = list()
+
+   for i in range(len(poss)):
+      print "************************"
+      print "Moving to %f microns." % poss[i]
+
+      resp = foc.pos(poss[i])
+
+      if(resp != 1):
+        break
+
+      resp = foc.wait_move()
+
+      if(resp != 1):
+        break
+
+      pos = foc.get_pos()
+
+      print "At %f microns." % pos
+      meas = float(raw_input("Enter measurement (in mm): "))
+      print "%f %f" % (pos, meas)
+
+
+      cal_pos.append(pos)
+      meas_pos.append(meas)
+
+
+   x = array(cal_pos)
+   y = array(meas_pos)*1000.
+   A = numpy.vstack([x, ones(len(x))]).T
+
+   m,b = numpy.linalg.lstsq(A,y)[0]
+
+   yfit = m*x + b
+   resid = yfit-y
+   print "\n\nCalibration Complete\n\n"
+   print "y = %f + %fx" % (b, m)
+   print "\nStd dev of residuals: %f microns\n" % numpy.std(resid)
+   print "Data:\nPosition\tMeasured\tResidual"
+   for i in range(len(cal_pos)):
+     print "%f\t%f\t%f" %(cal_pos[i], meas_pos[i], resid[i])
+
+   foc.giveup_control()
+
+
+
+def focus(start, end, stepsz, ims=5, settle_delay = 1.):
+   """
+      Peform a focus measurement.
+
+      Moves from position start to end, in steps of size stepsz.
+
+      At each position, the script pauses for settle_delay to allow vibrations to dissipate, and then take ims images.
+
+      Images are saved in a sub-directory with the start time (standard VisAO filename) in the name.
+   """
+   foc = VisAOScript.FocusCtrl()
+   foc.take_control()
+
+   ccd = VisAOScript.CCD47Ctrl()
+   ccd.take_control()
+
+   dist = abs( end - start)
+
+   if abs(stepsz) < 5.:
+      print "Stepsize too small."
+      return
+
+   if end < start:
+     if stepsz > 0:
+       stepsz = stepsz * -1.
+   else:
+     if stepsz < 0:
+       stepsz = stepsz * -1.
+
+   if ims <= 0:
+     print "Number of images must be > 0."
+     return
+
+   print "************************"
+   print "Moving to %f microns." % start
+
+   resp = foc.pos(start)
+   if(resp != 1):
+     print "Focus motor error. "
+     return
+
+   resp = foc.wait_move()
+
+   if(resp != 1):
+      print "Focus motor error. "
+      return
+
+   pos = foc.get_pos()
+   print "At %f microns.\n\nBeginning focus curve acquisition . . ." % pos
+
+   nextpos = pos
+
+   sd = "focus_%s" % VisAOScript.get_visao_filename(time.time())
+   ccd.subdir(sd)
+
+   while abs(nextpos - start) < (dist + .1*abs(stepsz)):
+      print "************************"
+      print "Moving to %f microns . . ." % nextpos
+
+      resp = foc.pos(nextpos)
+
+      if(resp != 1):
+        print "Focus motor error."
+        return
+
+      resp = foc.wait_move()
+
+      if(resp != 1):
+        print "Focus motor error."
+        return
+
+      pos = foc.get_pos()
+
+      print "Move complete.  Settling for %f seconds . . ." % settle_delay
+      time.sleep(settle_delay)
+      print "Saving %i images at %f microns." % (ims, pos)
+
+      resp = ccd.save(ims)
+      if(resp != 0):
+         print "CCD47 error. "
+         return
+
+      resp = ccd.wait_save()
+      if(resp != 1):
+         print "CCD47 error. "
+         return
+
+      print "Saving complete."
+
+      nextpos = pos + stepsz
+
+   print "\n\nFocus Curve acquistion complete.\n\n"
+
+   ccd.subdir(".")
+   foc.giveup_control()
+   ccd.giveup_control()
+
+
+def filter2_focus(filters, homefirst, start, end, stepsz, ims=5, settle_delay = 1.):
+   """
+      Peform a focus measurement, in each of a sequence of filter wheel 2 positions.
+
+      The filters are specified as a python list, i.e. ["SDSS r'", "SDSS i'", "SDSS z'"]
+
+      If homefirst is true, the wheel is homed before beginning.
+
+      In each filter, the focus script is executed.
+   """
+   fw2 = VisAOScript.FilterWheel2()
+
+   fw2.take_control()
+
+   if homefirst:
+      print "Homing FilterWheel2. . ."
+      resp = fw2.home()
+
+      resp = fw2.wait_home()
+      time.sleep(5)
+      print "Homing complete."
+
+   for i in range(len(filters)):
+
+      print "Changing filter to %s . . ." % filters[i]
+      resp = fw2.set_filter(filters[i])
+
+
+      resp = fw2.wait_move()
+      time.sleep(2)
+      filt = fw2.get_filter()
+
+      print "In filter %s . . ." % filt
+
+      if filt!= filters[i]:
+        print "Filter not correct."
+        return
+
+      focus(start, end, stepsz, ims, settle_delay)
+
+   fw2.giveup_control()
+
+\endcode
+
+
+
+
+**/
+
+

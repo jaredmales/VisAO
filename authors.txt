@@ -1,0 +1,2 @@
+jrmales = Jared Males <jaredmales@gmail.com>
+ktmorz = Katie Morzinski  <katiemorzinski@gmail.com>
